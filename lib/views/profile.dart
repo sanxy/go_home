@@ -1,0 +1,132 @@
+import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../components/customAppBar.dart';
+import '../components/profileComponents.dart';
+import '../dashboard.dart';
+
+class Profile extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  var user;
+  var myString;
+
+  getUserDetails () async{
+    SharedPreferences shared_User = await SharedPreferences.getInstance();
+    // Map userMap = jsonDecode(shared_User.getString('user'));
+    user = shared_User.getStringList('user');
+    debugPrint(user.toString());
+    debugPrint(user[2]);
+
+    setState(() {
+      myString = user[3];
+    });
+    
+  }
+
+  _logout() async{
+    SharedPreferences shared_User = await SharedPreferences.getInstance();
+    shared_User.setStringList('user', []);
+    shared_User.setBool("isAuth", false);
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Dashboard()));
+  }
+
+  
+
+
+@override
+  void initState() {
+    super.initState();
+    getUserDetails();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.keyboard_arrow_left,
+                      size: 40,
+                    ),
+                    onPressed: null,
+                  ),
+                  Text(
+                    "My Account",
+                    textAlign: TextAlign.end,
+                  ),
+                ],
+              ),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    CircleAvatar(
+                      backgroundImage: AssetImage(
+                        "assets/cus_sup.png",
+                      ),
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.white38,
+                      maxRadius: 70,
+                    
+                    ),
+                    Column(
+                      children: <Widget>[
+                        Text(
+                          myString,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                              textAlign: TextAlign.start,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.phone,
+                              color: Color(0xFF79c942),
+                            ),
+                            Text("08023454545"),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.email,
+                              color: Color(0xFF79c942),
+                            ),
+                            Text("jane@doe.com"),
+                          ],
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              ProfileComponents(listIcon: Icons.edit, listText: "My Properties"),
+              ProfileComponents(listIcon: Icons.edit, listText: "Edit Profile"),
+              ProfileComponents(listIcon: Icons.add, listText: "Add Properties"),
+              ProfileComponents(listIcon: Icons.star, listText: "Favorites"),
+              ProfileComponents(listIcon: Icons.edit, listText: "Inspection Request"),
+              ProfileComponents(listIcon: Icons.trending_up, listText: "Trending Properties"),
+              ProfileComponents(listIcon: Icons.notifications, listText: "Notifications"),
+              ProfileComponents(listIcon: Icons.settings, listText: "Settings"),
+              GestureDetector(
+                onTap: _logout,
+                child: ProfileComponents(listIcon: Icons.power_settings_new, listText: "Log out"),
+              )
+              
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
