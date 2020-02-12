@@ -1,30 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'dart:async';
 
-import 'package:async/async.dart';
-
-import 'dart:convert';
-import '../components/propertyList.dart';
-import '../views/eachProperty.dart';
-
-import 'package:http/http.dart' as http;
-
-class CityContent extends StatefulWidget {
-  final String location;
-
-  CityContent(this.location);
-
+class FilterComponent extends StatefulWidget{
   @override
-  State<StatefulWidget> createState() => _CityContentState(location);
+  State<StatefulWidget> createState() => _FilterComponentState();
 }
 
-class _CityContentState extends State<CityContent> with WidgetsBindingObserver {
-  final String location;
+class _FilterComponentState extends State<FilterComponent>{
 
-  _CityContentState(this.location);
-
-  String furnValue = "Furnished";
+   String furnValue = "Furnished";
   String regionValue = "Any Region";
   String statusValue = "Sale";
   String bedroomValue = "Bedrooms";
@@ -32,46 +16,12 @@ class _CityContentState extends State<CityContent> with WidgetsBindingObserver {
   String minAmountValue = "Min Amount";
   String maxAmountValue = "Max Amount";
 
-  Map data;
-
-  List userData;
-
-  static List updatedData;
-
-  final AsyncMemoizer _memoizer = AsyncMemoizer();
-
-  getData() async {
-    return this._memoizer.runOnce(() async {
-      var response = await http.get(
-          Uri.encodeFull(
-              "http://www.gohome.ng/getProperties.php?state='${location}'"),
-          headers: {"Accept": "application/json"});
-
-      // var response = await http.get("http://www.gohome.ng/get_all_api.php");
-      userData = json.decode(response.body);
-
-      // setState(() {
-      //   updatedData = [for (var i = 0; i <= 2; i += 1) userData[i]];
-      // });
-
-      debugPrint(userData.toString());
-      return userData;
-    });
-  }
-
   @override
-  void initState() {
-    super.initState();
-    // getData();
+  Widget build(BuildContext context) {
+    return null;
   }
 
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  void _settingModalBottomSheet(context) {
+  void settingModalBottomSheet(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -238,7 +188,6 @@ class _CityContentState extends State<CityContent> with WidgetsBindingObserver {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   padding: EdgeInsets.all(5),
                   child: DropdownButton<String>(
-                    isExpanded: true,
                     value: bathroomValue,
                     icon: Icon(Icons.arrow_drop_down),
                     iconSize: 24,
@@ -272,7 +221,6 @@ class _CityContentState extends State<CityContent> with WidgetsBindingObserver {
                       borderRadius: BorderRadius.all(Radius.circular(20))),
                   padding: EdgeInsets.all(5),
                   child: DropdownButton<String>(
-                    isExpanded: true,
                     value: minAmountValue,
                     icon: Icon(Icons.arrow_drop_down),
                     iconSize: 24,
@@ -344,90 +292,4 @@ class _CityContentState extends State<CityContent> with WidgetsBindingObserver {
         });
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text("All Properties for ${location}"),
-          backgroundColor: Color(0xFF79c942),
-        ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(10),
-                child: Center(
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        "Showing all available Properties for ${location}",
-                        style: TextStyle(fontSize: 15.0),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              MaterialButton(
-                onPressed: () {
-                  _settingModalBottomSheet(context);
-                },
-                child: Text(
-                  "Filter",
-                  style: TextStyle(color: Color(0xFF79c942)),
-                ),
-                elevation: 10,
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 20),
-                child: new FutureBuilder(
-                  future: getData(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      var myData = snapshot.data;
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: ClampingScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          final item = myData[index];
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      EachProperty(items: item),
-                                ),
-                              );
-                            },
-                            child: PropertyList(
-                              amount: item["amount"],
-                              location: item["address"],
-                              propId: item["prop_id"],
-                              region: item["region"],
-                              state: item["state"],
-                              imagePath: item["img1"],
-                              saleOrRent: item["status"],
-                              title: item["title"],
-                            ),
-                          );
-                        },
-                        itemCount: myData.length,
-                      );
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 }

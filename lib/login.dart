@@ -139,7 +139,7 @@ class _LoginState extends State<Login> {
 bool is_checked = false;
   @override
   Widget build(BuildContext context) {
-    return new SafeArea(
+    return SafeArea(
       child: Scaffold(
       body: Container(
         color: Colors.white30,
@@ -301,7 +301,7 @@ bool is_checked = false;
           ],
         ),
       ),
-    ),
+    )
     );
   }
 }

@@ -3,28 +3,28 @@ import 'package:flutter/material.dart';
 class ProfileComponents extends StatelessWidget{
   final IconData listIcon;
   final String listText;
+  final Color clr;
 
-  ProfileComponents({this.listIcon, this.listText});
+  ProfileComponents({this.listIcon, this.listText, this.clr});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Container(
+    return Container(
+      color: clr,
       padding: EdgeInsets.all(5),
       child:Row(
         children: <Widget>[
-          Icon(
-            listIcon,
-            color: Color(0xFF79c942),
-            size: 30,
-          ),
+          // Icon(
+          //   listIcon,
+          //   color: Color(0xFF79c942),
+          //   size: 30,
+          // ),
           Container(
-            padding: EdgeInsets.only(left: 20),
-            child: Text(listText, style: TextStyle(fontSize: 20),),
+            padding: EdgeInsets.all(15),
+            child: Text(listText, style: TextStyle(fontSize: 17),),
           )
         ],
       )
-    ),
     );
   }
 

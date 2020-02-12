@@ -92,6 +92,12 @@ class _DashboardState extends State<Dashboard> {
                         ));
                   },
                   child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black45,
+                      ),
+                    ),
                     padding: EdgeInsets.all(10),
                     width: double.infinity,
                     child: Text(
@@ -125,8 +131,13 @@ class _DashboardState extends State<Dashboard> {
                       ),
                     );
                   },
-                  
                   child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black45,
+                      ),
+                    ),
                     padding: EdgeInsets.all(10),
                     width: double.infinity,
                     child: Text(
@@ -142,6 +153,12 @@ class _DashboardState extends State<Dashboard> {
                               MaterialPageRoute(builder: (context) => Login()));
                         },
                         child: Container(
+                          decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black45,
+                      ),
+                    ),
                           padding: EdgeInsets.all(10),
                           width: double.infinity,
                           child: Text(
@@ -157,48 +174,48 @@ class _DashboardState extends State<Dashboard> {
         ],
       )),
       // appBar:  AppBar(...) : null
-      appBar: boolTrue ? AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Image(
-          image: AssetImage('assets/gohome.png'),
-          width: 100,
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Color(0xFF79c942),
-            ),
-            onPressed: () => _scaffoldKey.currentState.openDrawer(),
-          ),
-          isAuth
-              ? Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: CircleAvatar(
-                    backgroundColor: Color(0xFF79c942),
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.person,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Profile(),
-                          ),
-                        );
-                      },
-                    ),
+      appBar: boolTrue
+          ? AppBar(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              automaticallyImplyLeading: false,
+              title: Image(
+                image: AssetImage('assets/gohome.png'),
+                width: 100,
+              ),
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.menu,
+                    color: Color(0xFF79c942),
                   ),
-                )
-              : Text("")
-        ],
-      )
-      :
-      null,
+                  onPressed: () => _scaffoldKey.currentState.openDrawer(),
+                ),
+                isAuth
+                    ? Container(
+                        margin: EdgeInsets.only(right: 10),
+                        child: CircleAvatar(
+                          backgroundColor: Color(0xFF79c942),
+                          child: IconButton(
+                            icon: Icon(
+                              Icons.person,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Profile(),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    : Text("")
+              ],
+            )
+          : null,
       body: tabs[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: Color(0xFF79c942),

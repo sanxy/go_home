@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../components/labelledInput.dart';
+
 class InquiryForm extends StatefulWidget{
   @override
   State<StatefulWidget> createState() =>_InquiryFormState();
@@ -19,6 +21,7 @@ class _InquiryFormState extends State<InquiryForm> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFF79c942),
           title: Text("Inquiry form"),
         ),
         body: Container(
@@ -28,19 +31,14 @@ class _InquiryFormState extends State<InquiryForm> {
             child: Column(
               children: <Widget>[
                 Text("Inquiry"),
-                TextFormField(
-                  decoration: InputDecoration(
-                      border: InputBorder.none, hintText: 'Username'),
-                  
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                      border: InputBorder.none, hintText: 'Email'),
-                ),
-                TextField(
-                maxLines: 8,
-                decoration: InputDecoration.collapsed(hintText: "Enter your text here"),
-              ),
+                LabelledInput(hint: "Username",),
+                LabelledInput(hint: "Email",),
+                LabelledInput(hint: "Enter your message here", maxLines: 8,),
+                MaterialButton(
+                  onPressed: null,
+                  child: Text("Submit"),
+                  color: Color(0xFF79c942),
+                )
               ],
             ),
           ),

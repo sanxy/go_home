@@ -19,22 +19,22 @@ class EachProperty extends StatelessWidget {
         backgroundColor: Color(0xFF79c942),
         elevation: 0,
         actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.shopping_cart,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MakeRequest(
-                    id: items["id"],
-                  ),
-                ),
-              );
-            },
-          )
+          // IconButton(
+          //   icon: Icon(
+          //     Icons.shopping_cart,
+          //     color: Colors.white,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => MakeRequest(
+          //           id: items["id"],
+          //         ),
+          //       ),
+          //     );
+          //   },
+          // )
         ],
       ),
       body: SingleChildScrollView(
@@ -52,6 +52,69 @@ class EachProperty extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
+              ),
+              Container(
+                child:SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/bul2.jpg"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/bul4.jpg"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/bul2_clear.jpg"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/bul4.jpg"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/bul2.jpg"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),),
               ),
               Container(
                 child: Column(
@@ -113,7 +176,10 @@ class EachProperty extends StatelessWidget {
                           padding: EdgeInsets.all(20),
                           child: Column(
                             children: <Widget>[
-                              Text("Make a request", style: TextStyle(fontSize: 20),),
+                              Text(
+                                "Make a request",
+                                style: TextStyle(fontSize: 20),
+                              ),
                               Container(
                                 margin: EdgeInsets.only(top: 10, bottom: 10),
                                 child: TextFormField(
@@ -143,7 +209,11 @@ class EachProperty extends StatelessWidget {
                                 ),
                               ),
                               MaterialButton(
-                                child: Text("Submit", style: TextStyle(color: Color(0xFF79c942), fontSize: 25),),
+                                child: Text(
+                                  "Submit",
+                                  style: TextStyle(
+                                      color: Color(0xFF79c942), fontSize: 25),
+                                ),
                                 onPressed: null,
                                 color: Color(0xFF79c942),
                               ),
@@ -173,46 +243,84 @@ class EachProperty extends StatelessWidget {
                 child: Text("Nearby areas"),
                 margin: EdgeInsets.only(bottom: 10),
               ),
-              Row(
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
+              SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
                     children: <Widget>[
-                      Image(
-                        image:AssetImage("assets/bul2.jpg"),
-                        width: MediaQuery.of(context).size.width * 0.25,
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/property_location.jpg"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                            Text("Property location")
+                          ],
+                        ),
                       ),
-                      Text("Schools")
-                    ],
-                  ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                    children: <Widget>[
-                      Image(
-                        image:AssetImage("assets/bul2.jpg"),
-                        width: MediaQuery.of(context).size.width * 0.25,
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/gym.png"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                            Text("Gym")
+                          ],
+                        ),
                       ),
-                      Text("Markets")
-                    ],
-                  ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(10),
-                    child: Column(
-                    children: <Widget>[
-                      Image(
-                        image:AssetImage("assets/bul2.jpg"),
-                        width: MediaQuery.of(context).size.width * 0.25,
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/school.png"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                            Text("School")
+                          ],
+                        ),
                       ),
-                      Text("Bed Sitters")
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/hospital.png"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                            Text("Hospitals")
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/eatery.png"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                            Text("Eatery")
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.all(10),
+                        child: Column(
+                          children: <Widget>[
+                            Image(
+                              image: AssetImage("assets/hotel.png"),
+                              width: MediaQuery.of(context).size.width * 0.25,
+                            ),
+                            Text("Hotel")
+                          ],
+                        ),
+                      )
                     ],
-                  ),
-                  )
-                ],
-              )
+                  ))
             ],
           ),
         ),

@@ -23,7 +23,14 @@ class _SplashPageState extends State<SplashPage> {
 
   _AuthPref() async {
     SharedPreferences shared_User = await SharedPreferences.getInstance();
-    shared_User.setBool("isAuth", false);
+    if (shared_User.getBool("isAuth") != true){
+      shared_User.setBool("isAuth", false);
+    } else if (shared_User.getBool("isAuth") == true){
+      shared_User.setBool("isAuth", true); 
+    }else{
+      shared_User.setBool("isAuth", false);
+    }
+    
   }
 
   checkConnection() async {
@@ -51,13 +58,12 @@ class _SplashPageState extends State<SplashPage> {
   Widget build(BuildContext context) {
     return SplashScreen(
       seconds: 10,
-      // imageBackground: new AssetImage('assets/barber1.jpg'),
       photoSize: 100.0,
       image: Image(
         image: new AssetImage('assets/gohome.png'),
         alignment: Alignment.center,  
       ),
-      loaderColor: Color(0x79c942),
+      loaderColor: Color(0xFF79c942),
       navigateAfterSeconds: 
       Dashboard()
     );
