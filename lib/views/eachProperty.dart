@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
+import 'package:go_home/views/nearbyPlaces.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:network/network.dart' as network;
 import 'package:http/http.dart';
@@ -86,11 +88,87 @@ class _EachPropertyState extends State<EachProperty> {
         // setState(() {
         //   isLoading = false;
         // });
+        showSimpleCustomDialog(
+            context, "Success", "Request has been sent successfully");
       }
       // debugPrint(user.toString());
     } else {
       print("error");
     }
+  }
+
+  FlutterMoneyFormatter fAmount;
+  String imgToDisplay;
+
+  String a;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    a = item.amount;
+    fAmount = FlutterMoneyFormatter(amount: double.parse(a));
+    imgToDisplay = item.img1;
+  }
+
+  void showSimpleCustomDialog(
+      BuildContext context, String messageHead, String messageBody) {
+    Dialog simpleDialog = Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Container(
+        height: 300.0,
+        width: 300.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      messageHead,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(10),
+                      child: Text(
+                        messageBody,
+                        textAlign: TextAlign.center,
+                        style:
+                            TextStyle(color: Color(0xFF79c942), fontSize: 20),
+                      ),
+                    ),
+                  ],
+                )),
+            Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Center(
+                    child: MaterialButton(
+                      color: Colors.greenAccent,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Ok!',
+                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+    showDialog(
+        context: context, builder: (BuildContext context) => simpleDialog);
   }
 
   @override
@@ -130,71 +208,329 @@ class _EachPropertyState extends State<EachProperty> {
                     image: NetworkImage("http://gohome.ng/assets/upload/" +
                         item.prop_id +
                         "/" +
-                        item.img1),
+                        imgToDisplay),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
               Container(
+                height: 100,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: <Widget>[
-                            Image(
-                              image: AssetImage("assets/bul2.jpg"),
-                              width: MediaQuery.of(context).size.width * 0.25,
-                            ),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img1;
+                          });
+                        },
+                        child: Container(
+                          height: 100,
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              SizedBox(
+                                child: Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img1),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: <Widget>[
-                            Image(
-                              image: AssetImage("assets/bul4.jpg"),
-                              width: MediaQuery.of(context).size.width * 0.25,
-                            ),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img2;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img2),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: <Widget>[
-                            Image(
-                              image: AssetImage("assets/bul2_clear.jpg"),
-                              width: MediaQuery.of(context).size.width * 0.25,
-                            ),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img3;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img3),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                                height: 100,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: <Widget>[
-                            Image(
-                              image: AssetImage("assets/bul4.jpg"),
-                              width: MediaQuery.of(context).size.width * 0.25,
-                            ),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img4;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img4),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: <Widget>[
-                            Image(
-                              image: AssetImage("assets/bul2.jpg"),
-                              width: MediaQuery.of(context).size.width * 0.25,
-                            ),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img5;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img5),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
                         ),
-                      )
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img6;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img6),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img7;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img7),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img8;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img8),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img9;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img9),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img10;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img10),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img12;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img12),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img13;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img13),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img14;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img14),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            imgToDisplay = item.img15;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(10),
+                          child: Column(
+                            children: <Widget>[
+                              Image(
+                                image: NetworkImage(
+                                    "http://gohome.ng/assets/upload/" +
+                                        item.prop_id +
+                                        "/" +
+                                        item.img15),
+                                width: MediaQuery.of(context).size.width * 0.25,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -206,7 +542,7 @@ class _EachPropertyState extends State<EachProperty> {
                       padding: EdgeInsets.all(10),
                       width: double.infinity,
                       child: Text(
-                        "\u20A6 " + item.amount + "/year",
+                        "\u20A6 " + fAmount.output.nonSymbol + "/year",
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: 30,
@@ -238,7 +574,7 @@ class _EachPropertyState extends State<EachProperty> {
                           Icons.call,
                           color: Color(0xFF79c942),
                         ),
-                        Text(" 08023456780"),
+                        Text(item.phone),
                       ],
                     ),
                     Row(
@@ -346,7 +682,16 @@ class _EachPropertyState extends State<EachProperty> {
                     children: <Widget>[
                       Container(
                         padding: EdgeInsets.all(10),
-                        child: Column(
+                        child: GestureDetector(
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => NearbyPlaces()
+                              )
+                            );
+                          },
+                          child: Column(
                           children: <Widget>[
                             Image(
                               image: AssetImage("assets/property_location.jpg"),
@@ -355,6 +700,7 @@ class _EachPropertyState extends State<EachProperty> {
                             Text("Property location")
                           ],
                         ),
+                        )
                       ),
                       Container(
                         padding: EdgeInsets.all(10),

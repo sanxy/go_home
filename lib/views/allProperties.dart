@@ -51,7 +51,29 @@ class _AllPropertiesState extends State<AllProperties> {
         print(properties);
       });
     });
-    
+  }
+
+  void filter() {
+    setState(() {
+      filteredProperties = properties
+          .where((p) =>
+              p.state.toLowerCase().contains(regionValue.toLowerCase()) &&
+              p.propType.toLowerCase().contains(typeValue.toLowerCase()) &&
+              p.status.toLowerCase().contains(statusValue.toLowerCase()) &&
+              p.bedroom.contains(bedroomValue) && 
+              // int.parse(p.bathroom) == int.parse(bathroomValue)
+              p.bathroom.contains(bathroomValue) &&
+              int.parse(p.amount) > int.parse(minAmountValue) &&
+              int.parse(p.amount) < int.parse(maxAmountValue))
+          .toList();
+    });
+  }
+
+  Future<void> refresh() async {
+    setState(() {
+      filteredProperties = properties;
+    });
+    return null;
   }
 
   @override
@@ -62,77 +84,45 @@ class _AllPropertiesState extends State<AllProperties> {
         backgroundColor: Color(0xFF79c942),
         key: GlobalKey(debugLabel: "sca"),
       ),
-      body: Column(
-        children: <Widget>[
-          Card(
-            child: Row(
-              children: <Widget>[
-                MaterialButton(
+      body: RefreshIndicator(
+        onRefresh: refresh,
+        child: Column(
+          children: <Widget>[
+            Container(
+                child: Container(
+              width: double.infinity,
+              alignment: Alignment.topRight,
+              child: MaterialButton(
                   disabledColor: Colors.grey,
-                  color: Color(0xFF79c942),
+                  color: Colors.white,
+                  elevation: 0,
                   key: GlobalKey(debugLabel: "sca"),
                   onPressed: () {
-                    isButtonDisabled
-                        ?
-                        // Find the Scaffold in the widget tree and use
-                        // it to show a SnackBar.
-                        // key.currentState.showSnackBar(snackBar)
-                        null
-                        : setState(() {
-                            filteredProperties = properties
-                                .where((p) =>
-                                    p.state
-                                        .toLowerCase()
-                                        .contains(regionValue.toLowerCase()) &&
-                                    p.propType
-                                        .toLowerCase()
-                                        .contains(typeValue.toLowerCase()) &&
-                                    p.status
-                                        .toLowerCase()
-                                        .contains(statusValue.toLowerCase()) &&
-                                    p.bedroom.contains(bedroomValue) &&
-                                    p.bathroom.contains(bathroomValue) &&
-                                    int.parse(p.amount) >
-                                        int.parse(minAmountValue) &&
-                                    int.parse(p.amount) <
-                                        int.parse(maxAmountValue))
-                                .toList();
-                          });
-                    print(filteredProperties);
-                  },
-                  child: Text("Filter"),
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    // setState(() {
-                    //  filteredProperties = properties.where((p) => p.amount.contains("5")).toList();
-                    // });
                     setState(() {
                       _settingModalBottomSheet(context);
                     });
+                    print(filteredProperties);
                   },
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Icon(
-                        Icons.settings,
-                        color: Color(0xFF79c942),
+                      Icon(Icons.filter_list),
+                      Text(
+                        "Filter",
+                        style: TextStyle(
+                          color: Color(0xFF79c942),
+                        ),
                       ),
-                      Icon(Icons.arrow_drop_down)
                     ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          filteredProperties.length > 0
-              ? 
-              Expanded(
-                  child: ListView.builder(
-                    itemCount: filteredProperties.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final item = filteredProperties[index];
-                      return PropertyList(
+                  )),
+            )),
+            filteredProperties.length > 0
+                ? Expanded(
+                    child: ListView.builder(
+                      itemCount: filteredProperties.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final item = filteredProperties[index];
+                        return PropertyList(
                           amount: filteredProperties[index].amount,
                           imagePath: filteredProperties[index].img1,
                           location: filteredProperties[index].address,
@@ -144,17 +134,18 @@ class _AllPropertiesState extends State<AllProperties> {
                           state: filteredProperties[index].state,
                           name: filteredProperties[index].name,
                           email: filteredProperties[index].user_email,
-                          goto: EachProperty(item: item,),
-                      );
-                    },
+                          goto: EachProperty(
+                            item: item,
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : CircularProgressIndicator(
+                    backgroundColor: Color(0xFF79c942),
                   ),
-                )
-                
-              : CircularProgressIndicator(
-                  backgroundColor: Color(0xFF79c942),
-                ),
-              
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -482,6 +473,10 @@ class _AllPropertiesState extends State<AllProperties> {
                           ),
                         ),
                         MaterialButton(
+                          height: 50,
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
                           onPressed: () {
                             // setState(() {
                             //   filteredProperties = properties
@@ -493,8 +488,12 @@ class _AllPropertiesState extends State<AllProperties> {
                               number = "3";
                             });
                             Navigator.pop(context);
+                            filter();
                           },
-                          child: Text("Apply Filter"),
+                          child: Text(
+                            "Apply Filter",
+                            style: TextStyle(color: Colors.white),
+                          ),
                           color: Color(0xFF79c942),
                         )
                       ],

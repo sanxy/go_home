@@ -107,7 +107,7 @@ class _NewsLetterState extends State<NewsLetter> {
                         Navigator.of(context).pop();
                       },
                       child: Text(
-                        'Cancel!',
+                        'Ok!',
                         style: TextStyle(fontSize: 18.0, color: Colors.white),
                       ),
                     ),
@@ -127,7 +127,7 @@ class _NewsLetterState extends State<NewsLetter> {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 70,
+      height: 60,
       child: Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
@@ -142,7 +142,7 @@ class _NewsLetterState extends State<NewsLetter> {
           children: <Widget>[
             Container(
               width: MediaQuery.of(context).size.width * 0.6,
-              padding: EdgeInsets.all(8),
+              padding: EdgeInsets.fromLTRB(10, 2, 5, 2),
               child: TextField(
                 controller: subController,
                 decoration: InputDecoration(
@@ -166,7 +166,7 @@ class _NewsLetterState extends State<NewsLetter> {
               ),
               color: Color(0xFF79c942),
               child: Container(
-                padding: EdgeInsets.all(8),
+                padding: EdgeInsets.all(2),
                 child: IconButton(
                   onPressed: null,
                   icon: Icon(

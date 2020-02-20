@@ -36,7 +36,7 @@ class SearchBox extends StatelessWidget {
 }
 
 class DataSearch extends SearchDelegate<String> {
-  final results = ['Lagos', 'Abuja', 'Oyo'];
+  final results = ['Lagos', 'Abuja', 'Oyo', 'Imo'];
 
   final recentResults = ['Lagos', 'Abuja'];
 
@@ -74,6 +74,11 @@ class DataSearch extends SearchDelegate<String> {
       margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
+          query.length < 1 ?
+          Center(
+            child: Text("No result found !"),
+          )
+          :
           Center(
             child: Text("Showing 1 result for " + query),
           ),
@@ -110,6 +115,7 @@ class DataSearch extends SearchDelegate<String> {
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         onTap: () {
+          query =suggestionList[index];
           showResults(context);
         },
         leading: Icon(Icons.location_city),

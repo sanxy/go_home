@@ -14,6 +14,7 @@ import '../views/topCities.dart';
 import '../views/allProperties.dart';
 
 import '../services/services.dart';
+import '../services/featuredServices.dart';
 import '../classes/property.dart';
 
 import 'dart:async';
@@ -49,21 +50,20 @@ class _DashboardTabState extends State<DashboardTab> {
 
   Future getData() async {
     var response = await http.get(
-        Uri.encodeFull("http://www.gohome.ng/get_all_api.php"),
+        Uri.encodeFull("https://www.gohome.ng/api/fetch_featured_api.php"),
         headers: {"Accept": "application/json"});
 
     userData = json.decode(response.body);
 
-    setState(() {
-      updatedData = [for (var i = 0; i <= 2; i += 1) userData[i]];
-    });
+    // setState(() {
+    //   updatedData = [for (var i = 0; i <= 2; i += 1) userData[i]];
+    // });
   }
-
 
   @override
   void initState() {
     super.initState();
-    Services.getProperties().then((propertiesFromServer) {
+    FeaturedServices.getProperties().then((propertiesFromServer) {
       setState(() {
         properties = propertiesFromServer;
         filteredProperties = properties;
@@ -95,50 +95,81 @@ class _DashboardTabState extends State<DashboardTab> {
                   Container(
                     padding: EdgeInsets.all(20),
                     margin: EdgeInsets.only(right: 10),
-                    height: MediaQuery.of(context).size.height * 0.4,
+                    height: MediaQuery.of(context).size.height * 0.5,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            ImageButton(
-                              label: "Property for \n       rent",
-                              imageLink: "assets/rent.png",
-                              widget: RentHouses(),
+                            Flexible(
+                              flex: 5,
+                              child: ImageButton(
+                                label: "Property for \n       rent",
+                                imageLink: "assets/rent.png",
+                                widget: RentHouses(),
+                              ),
                             ),
-                            ImageButton(
+                            Flexible(
+                              flex: 1,
+                              child: SizedBox(),
+                            ),
+                            Flexible(
+                              flex: 5,
+                              child: ImageButton(
                                 label: "   View all \n Properties",
                                 imageLink: "assets/properties.png",
-                                widget: AllProperties()),
+                                widget: AllProperties(),
+                              ),
+                            )
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            ImageButton(
-                              label: "Property for \n        sale",
-                              imageLink: "assets/sale.png",
-                              widget: SaleHouses(),
+                            Flexible(
+                              flex: 5,
+                              child: ImageButton(
+                                label: "Property for \n        sale",
+                                imageLink: "assets/sale.png",
+                                widget: SaleHouses(),
+                              ),
                             ),
-                            ImageButton(
-                                label: "Become an \n    agent",
-                                imageLink: "assets/cus_sup.png",
-                                widget: SignUp()),
+                            Flexible(
+                              flex: 1,
+                              child: SizedBox(),
+                            ),
+                            Flexible(
+                              flex: 5,
+                              child: ImageButton(
+                                  label: "Become an \n    agent",
+                                  imageLink: "assets/cus_sup.png",
+                                  widget: SignUp()),
+                            )
                           ],
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            ImageButton(
-                                label: "Top cities \n   ",
-                                imageLink: "assets/building.png",
-                                widget: TopCities()),
-                            ImageButton(
-                              label: "Blog Posts \n    ",
-                              imageLink: "assets/blog.png",
-                              widget: BlogDisplay(),
+                            Flexible(
+                              flex: 5,
+                              child: ImageButton(
+                                  label: "Top cities \n   ",
+                                  imageLink: "assets/building.png",
+                                  widget: TopCities()),
                             ),
+                            Flexible(
+                              flex: 1,
+                              child: SizedBox(),
+                            ),
+                            Flexible(
+                              flex: 5,
+                              child: ImageButton(
+                                label: "Blog Posts \n    ",
+                                imageLink: "assets/blog.png",
+                                widget: BlogDisplay(),
+                              ),
+                            )
                           ],
                         )
                       ],
@@ -178,7 +209,7 @@ class _DashboardTabState extends State<DashboardTab> {
                       : ListView.builder(
                           shrinkWrap: true,
                           physics: ClampingScrollPhysics(),
-                          itemCount: 3,
+                          itemCount: filteredProperties.length,
                           itemBuilder: (BuildContext context, int index) {
                             final item = filteredProperties[index];
                             return PropertyList(

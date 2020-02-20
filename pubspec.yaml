@@ -28,6 +28,7 @@ dependencies:
   splashscreen: ^1.2.0
   geolocator: ^5.2.1
   google_maps_flutter: ^0.5.11
+  flutter_money_formatter: ^0.8.3
 
 dev_dependencies:
   flutter_test:

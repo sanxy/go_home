@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 import './pills.dart';
 
 class PropertyList extends StatefulWidget {
-
   final String id;
   final String amount;
   final String location;
@@ -20,7 +20,6 @@ class PropertyList extends StatefulWidget {
   final String name;
   final String email;
   final Widget goto;
-  final Widget viewContact;
 
   PropertyList(
       {this.id,
@@ -35,21 +34,26 @@ class PropertyList extends StatefulWidget {
       this.phone,
       this.name,
       this.email,
-      this.goto,
-      this.viewContact});
+      this.goto,});
 
   @override
-  State<StatefulWidget> createState() =>
-   _PropertyListState(id: id, amount: amount, location: location, 
-   propId: propId, region: region, state: state, 
-   imagePath: imagePath, saleOrRent: saleOrRent, title: title, phone: phone, name: name, email: email, goto: goto, 
-   viewContact: viewContact
-   );
+  State<StatefulWidget> createState() => _PropertyListState(
+      id: id,
+      amount: amount,
+      location: location,
+      propId: propId,
+      region: region,
+      state: state,
+      imagePath: imagePath,
+      saleOrRent: saleOrRent,
+      title: title,
+      phone: phone,
+      name: name,
+      email: email,
+      goto: goto,);
 }
 
-
-
-class _PropertyListState extends State<PropertyList>{
+class _PropertyListState extends State<PropertyList> {
   final String id;
   final String amount;
   final String location;
@@ -63,7 +67,6 @@ class _PropertyListState extends State<PropertyList>{
   final String name;
   final String email;
   final Widget goto;
-  final Widget viewContact;
 
   _PropertyListState(
       {this.id,
@@ -78,8 +81,9 @@ class _PropertyListState extends State<PropertyList>{
       this.phone,
       this.name,
       this.email,
-      this.goto,
-      this.viewContact});
+      this.goto,});
+
+  String a;
 
   void showSimpleCustomDialog(BuildContext context) {
     Dialog simpleDialog = Dialog(
@@ -187,8 +191,8 @@ class _PropertyListState extends State<PropertyList>{
                   MaterialButton(
                       onPressed: () {
                         setState(() {
-                         isActive = true; 
-                         Navigator.of(context).pop();
+                          isActive = true;
+                          Navigator.of(context).pop();
                         });
                       },
                       child: Icon(
@@ -216,11 +220,15 @@ class _PropertyListState extends State<PropertyList>{
 
   bool isActive = false;
 
+  FlutterMoneyFormatter fAmount;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isActive = false;
+    a = amount;
+    fAmount =
+        FlutterMoneyFormatter(amount: double.parse(a));
   }
 
   @override
@@ -239,7 +247,7 @@ class _PropertyListState extends State<PropertyList>{
             Row(
               children: <Widget>[
                 GestureDetector(
-                  onLongPress: (){
+                  onLongPress: () {
                     addToFavorites(context);
                   },
                   onTap: () {
@@ -272,22 +280,23 @@ class _PropertyListState extends State<PropertyList>{
                             Container(
                               width: MediaQuery.of(context).size.width * 0.5,
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
+                                  saleOrRent.length > 1 ?
                                   Container(
                                     child: Pill("For " + saleOrRent),
-                                  ),
-                                  isActive ?
-                                  Container(
-                                      child: Icon(
-                                        Icons.favorite,
-                                        color: Colors.red,
-                                      ),
-                                    )
+                                  )
                                   :
-                                  Container(
-                                      child: Text("")
-                                    )
+                                  null,
+                                  isActive
+                                      ? Container(
+                                          child: Icon(
+                                            Icons.favorite,
+                                            color: Colors.red,
+                                          ),
+                                        )
+                                      : Container(child: Text(""))
                                 ],
                               ),
                             ),
@@ -323,7 +332,7 @@ class _PropertyListState extends State<PropertyList>{
                             Container(
                               padding: EdgeInsets.only(left: 5),
                               child: Text(
-                                "\u20A6 " + amount,
+                                "\u20A6 " + fAmount.output.nonSymbol.toString(),
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
