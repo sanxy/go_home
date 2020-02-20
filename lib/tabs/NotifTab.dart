@@ -7,14 +7,14 @@ import '../components/notificationPill.dart';
 import '../services/cityContentServices.dart';
 import '../classes/property.dart';
 import '../components/propertyList.dart';
-import './eachProperty.dart';
+import '../views/eachProperty.dart';
 
-class Notifications extends StatefulWidget {
+class NotificationsTab extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _NotificationState();
+  State<StatefulWidget> createState() => _NotificationTabState();
 }
 
-class _NotificationState extends State<Notifications> {
+class _NotificationTabState extends State<NotificationsTab> {
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
 
   Position _currentPosition;
@@ -42,10 +42,6 @@ class _NotificationState extends State<Notifications> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Notifications"),
-        backgroundColor: Color(0xFF79c942),
-      ),
       body: SingleChildScrollView(
         child: Container(
           width: double.infinity,

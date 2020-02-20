@@ -189,7 +189,7 @@ class _HousesState extends State<Houses> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      EachProperty(items: item),
+                                      EachProperty(item: item),
                                 ),
                               );
                             },

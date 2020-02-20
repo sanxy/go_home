@@ -3,13 +3,28 @@ import 'package:flutter/material.dart';
 import '../components/notificationPill.dart';
 
 class NotificationPill extends StatelessWidget {
+
+  final String title;
+  final String time;
+  final Widget goto;
+
+  NotificationPill({this.title, this.time, this.goto});
+
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 80.0,
       color: Colors.black12,
       padding: EdgeInsets.all(5),
       margin: EdgeInsets.only(top: 10),
-      child: Row(
+      child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => goto),
+                    );
+                  },
+                  child: Row(
         children: <Widget>[
           CircleAvatar(
             backgroundImage: AssetImage(
@@ -24,14 +39,19 @@ class NotificationPill extends StatelessWidget {
             child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text("Attractive 4-Storey building at Gwarinpa", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),),
+              Flexible(
+                child: Text(title.length > 30 ? title.substring(0,30) + "\n" + title.substring(31,60): title, overflow: TextOverflow.visible, style: TextStyle(fontWeight: FontWeight.w500, fontSize: 15),),
+              ),              
               Text("Check recommendations for you!"),
-              Text("16:43 on Feb 10, 2020", style: TextStyle(fontWeight: FontWeight.w300),)
+              Text(time, style: TextStyle(fontWeight: FontWeight.w300),)
             ],
           ),
           )
         ],
       ),
+      ),
+      
+      
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 import './dashboard.dart';
 import 'package:http/http.dart';

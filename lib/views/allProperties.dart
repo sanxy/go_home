@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import '../services/rentServices.dart';
+import '../services/services.dart';
 import '../classes/property.dart';
 import '../components/propertyList.dart';
 import 'eachProperty.dart';
 
-class RentHouses extends StatefulWidget {
-  RentHouses() : super();
+class AllProperties extends StatefulWidget {
+  AllProperties() : super();
 
   @override
-  State<StatefulWidget> createState() => _RentHousesState();
+  State<StatefulWidget> createState() => _AllPropertiesState();
 }
 
-class _RentHousesState extends State<RentHouses> {
+class _AllPropertiesState extends State<AllProperties> {
   List<Property> properties = List();
   List<Property> filteredProperties = List();
 
@@ -44,20 +44,21 @@ class _RentHousesState extends State<RentHouses> {
   void initState() {
     super.initState();
     isButtonDisabled = true;
-    RentServices.getProperties().then((propertiesFromServer) {
+    Services.getProperties().then((propertiesFromServer) {
       setState(() {
         properties = propertiesFromServer;
         filteredProperties = properties;
         print(properties);
       });
     });
+    
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Properties for Rent"),
+        title: Text("All Properties"),
         backgroundColor: Color(0xFF79c942),
         key: GlobalKey(debugLabel: "sca"),
       ),

@@ -4,8 +4,9 @@ class LabelledInput extends StatelessWidget {
   final String label;
   final String hint;
   final int maxLines;
+  final TextEditingController controller;
 
-  LabelledInput({this.label, this.hint, this.maxLines});
+  LabelledInput({this.label, this.hint, this.maxLines, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +27,9 @@ class LabelledInput extends StatelessWidget {
         children: <Widget>[
           // Text(label, textAlign: TextAlign.start,),
           TextFormField(
+            controller: controller,
             decoration: InputDecoration(
-              hintText: hint,
-              
+              hintText: hint,              
             ),
             maxLines: maxLines,
           )

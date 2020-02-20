@@ -3,14 +3,16 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 
 import './tabs/dashboardTab.dart';
 import './tabs/favoritesTab.dart';
-import './tabs/messagesTab.dart';
+import './tabs/notifTab.dart';
 import './tabs/blogTab.dart';
 import './views/profile.dart';
 import './classes/user.dart';
-import './views/allhouses.dart';
+import './views/allProperties.dart';
 import './views/inquiryForm.dart';
 import './Login.dart';
 import './views/addProperties.dart';
@@ -27,7 +29,48 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   final User user;
 
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+  Position _currentPosition;
+  String _currentAddress;
+
   bool isAuth = false;
+
+  void _getCurrentLocation() {
+    geolocator
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
+        .then((Position position) {
+      setState(() {
+        _currentPosition = position;
+      });
+
+      _getAddressFromLatLng();
+    }).catchError((e) {
+      print(e);
+    });
+  }
+
+  _getAddressFromLatLng() async {
+    try {
+      List<Placemark> p = await geolocator.placemarkFromCoordinates(
+          _currentPosition.latitude, _currentPosition.longitude);
+
+      Placemark place = p[0];
+
+      setState(() {
+        _currentAddress =
+            "${place.locality}";
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  getUserLocation() async{
+    SharedPreferences shared_User = await SharedPreferences.getInstance();
+    String location = _currentAddress;
+    shared_User.setString("geoLocation", location);
+  }
 
   getUserState() async {
     SharedPreferences shared_User = await SharedPreferences.getInstance();
@@ -60,7 +103,7 @@ class _DashboardState extends State<Dashboard> {
 
   int _currentIndex = 0;
 
-  final tabs = [DashboardTab(), FavoritesTab(), MessagesTab(), BlogTab()];
+  final tabs = [DashboardTab(), FavoritesTab(), NotificationsTab(), BlogTab()];
 
   bool boolTrue = true;
 
@@ -88,7 +131,7 @@ class _DashboardState extends State<Dashboard> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AllHouses(),
+                          builder: (context) => AllProperties(),
                         ));
                   },
                   child: Container(

@@ -1,8 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../components/propertyList.dart';
 import './cityContent.dart';
 
-class TopCities extends StatelessWidget {
+class TopCities extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState() => TopCitiesState();
+
+}
+
+
+class TopCitiesState extends State<TopCities> {
+
+  String location;
+
+  sendToEach() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("location", location);
+  }
+
+  arraySeacrch(List haystack, String needle){
+    if(haystack.length == 0){
+      return false;
+    }else{
+      for(int i = 0; i <= haystack.length; i++ ){
+        if (haystack[i] == needle){
+          return true;
+        }else{
+          return false;
+        }
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    setState(() {
+     location = "lagos"; 
+    });
+    sendToEach();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,6 +70,9 @@ class TopCities extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    setState(() {
+                     location = "lagos"; 
+                    });
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -107,6 +151,9 @@ class TopCities extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    setState(() {
+                     location = "abuja";  
+                    });
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -143,6 +190,9 @@ class TopCities extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    setState(() {
+                     location = "oyo"; 
+                    });
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -180,6 +230,9 @@ class TopCities extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
+                    setState(() {
+                     location = "imo"; 
+                    });
                     Navigator.push(
                       context,
                       MaterialPageRoute(

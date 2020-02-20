@@ -404,7 +404,7 @@ class _FavoritesState extends State<Favorites> {
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) =>
-                                      EachProperty(items: item),
+                                      EachProperty(item: item),
                                 ),
                               );
                             },
