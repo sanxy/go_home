@@ -63,6 +63,7 @@ class _SplashPageState extends State<SplashPage> {
         image: new AssetImage('assets/gohome.png'),
         alignment: Alignment.center,  
       ),
+      
       loaderColor: Color(0xFF79c942),
       navigateAfterSeconds: 
       Dashboard()

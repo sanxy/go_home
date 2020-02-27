@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'package:quiver/async.dart';
+
 import '../services/services.dart';
 import '../classes/property.dart';
 import '../components/propertyList.dart';
@@ -13,6 +15,28 @@ class AllProperties extends StatefulWidget {
 }
 
 class _AllPropertiesState extends State<AllProperties> {
+  int _start = 10;
+  int _current = 10;
+
+  void startTimer() {
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: _start),
+      new Duration(seconds: 1),
+    );
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        _current = _start - duration.elapsed.inSeconds;
+      });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      sub.cancel();
+    });
+  }
+
   List<Property> properties = List();
   List<Property> filteredProperties = List();
 
@@ -20,8 +44,6 @@ class _AllPropertiesState extends State<AllProperties> {
   String furnValue = "Furnished";
   String regionValue = "Any Region";
   String statusValue = "Sale";
-  String bedroomValue = "Bedrooms";
-  String bathroomValue = "Bathrooms";
   String minAmountValue = "Min Amount";
   String maxAmountValue = "Max Amount";
 
@@ -29,6 +51,9 @@ class _AllPropertiesState extends State<AllProperties> {
 
   bool isButtonDisabled;
   bool isInitFilter;
+
+  TextEditingController bathroomController =TextEditingController();
+  TextEditingController bedroomController =TextEditingController();
 
   final snackBar = SnackBar(
     content: Text('Please set the filter'),
@@ -43,6 +68,7 @@ class _AllPropertiesState extends State<AllProperties> {
   @override
   void initState() {
     super.initState();
+    startTimer();
     isButtonDisabled = true;
     Services.getProperties().then((propertiesFromServer) {
       setState(() {
@@ -53,6 +79,15 @@ class _AllPropertiesState extends State<AllProperties> {
     });
   }
 
+  Future<void> reload() async{
+    Navigator.pushReplacement(
+      context, 
+      MaterialPageRoute(
+        builder: (context) => AllProperties()
+      ));
+      return null;
+  }
+
   void filter() {
     setState(() {
       filteredProperties = properties
@@ -60,9 +95,9 @@ class _AllPropertiesState extends State<AllProperties> {
               p.state.toLowerCase().contains(regionValue.toLowerCase()) &&
               p.propType.toLowerCase().contains(typeValue.toLowerCase()) &&
               p.status.toLowerCase().contains(statusValue.toLowerCase()) &&
-              p.bedroom.contains(bedroomValue) && 
+              p.bedroom.contains(bedroomController.text) &&
               // int.parse(p.bathroom) == int.parse(bathroomValue)
-              p.bathroom.contains(bathroomValue) &&
+              p.bathroom.contains(bathroomController.text) &&
               int.parse(p.amount) > int.parse(minAmountValue) &&
               int.parse(p.amount) < int.parse(maxAmountValue))
           .toList();
@@ -84,69 +119,85 @@ class _AllPropertiesState extends State<AllProperties> {
         backgroundColor: Color(0xFF79c942),
         key: GlobalKey(debugLabel: "sca"),
       ),
-      body: RefreshIndicator(
-        onRefresh: refresh,
-        child: Column(
-          children: <Widget>[
-            Container(
+      body: filteredProperties.length < 1 && _current > 0
+          ? Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Color(0xFF79c942),
+                )
+              )
+          : filteredProperties.length < 1 && _current == 0
+              ? RefreshIndicator(
+                onRefresh: reload,
                 child: Container(
-              width: double.infinity,
-              alignment: Alignment.topRight,
-              child: MaterialButton(
-                  disabledColor: Colors.grey,
-                  color: Colors.white,
-                  elevation: 0,
-                  key: GlobalKey(debugLabel: "sca"),
-                  onPressed: () {
-                    setState(() {
-                      _settingModalBottomSheet(context);
-                    });
-                    print(filteredProperties);
-                  },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                  height: MediaQuery.of(context).size.height,
+                  width: double.infinity,
+                  child: Text("No result found. Please check your data connection !"),
+                )
+              )
+              : RefreshIndicator(
+                  onRefresh: refresh,
+                  child: Column(
                     children: <Widget>[
-                      Icon(Icons.filter_list),
-                      Text(
-                        "Filter",
-                        style: TextStyle(
-                          color: Color(0xFF79c942),
-                        ),
-                      ),
+                      Container(
+                          child: Container(
+                        width: double.infinity,
+                        alignment: Alignment.topRight,
+                        child: MaterialButton(
+                            disabledColor: Colors.grey,
+                            color: Colors.white,
+                            elevation: 0,
+                            key: GlobalKey(debugLabel: "sca"),
+                            onPressed: () {
+                              setState(() {
+                                _settingModalBottomSheet(context);
+                              });
+                              print(filteredProperties);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Icon(Icons.filter_list),
+                                Text(
+                                  "Filter",
+                                  style: TextStyle(
+                                    color: Color(0xFF79c942),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      )),
+                      filteredProperties.length > 0
+                          ? Expanded(
+                              child: ListView.builder(
+                                itemCount: filteredProperties.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final item = filteredProperties[index];
+                                  return PropertyList(
+                                    amount: filteredProperties[index].amount,
+                                    imagePath: filteredProperties[index].img1,
+                                    location: filteredProperties[index].address,
+                                    propId: filteredProperties[index].prop_id,
+                                    region: filteredProperties[index].region,
+                                    saleOrRent:
+                                        filteredProperties[index].status,
+                                    title: filteredProperties[index].title,
+                                    phone: filteredProperties[index].phone,
+                                    state: filteredProperties[index].state,
+                                    name: filteredProperties[index].name,
+                                    email: filteredProperties[index].user_email,
+                                    goto: EachProperty(
+                                      item: item,
+                                    ),
+                                  );
+                                },
+                              ),
+                            )
+                          : CircularProgressIndicator(
+                              backgroundColor: Color(0xFF79c942),
+                            ),
                     ],
-                  )),
-            )),
-            filteredProperties.length > 0
-                ? Expanded(
-                    child: ListView.builder(
-                      itemCount: filteredProperties.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final item = filteredProperties[index];
-                        return PropertyList(
-                          amount: filteredProperties[index].amount,
-                          imagePath: filteredProperties[index].img1,
-                          location: filteredProperties[index].address,
-                          propId: filteredProperties[index].prop_id,
-                          region: filteredProperties[index].region,
-                          saleOrRent: filteredProperties[index].status,
-                          title: filteredProperties[index].title,
-                          phone: filteredProperties[index].phone,
-                          state: filteredProperties[index].state,
-                          name: filteredProperties[index].name,
-                          email: filteredProperties[index].user_email,
-                          goto: EachProperty(
-                            item: item,
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                : CircularProgressIndicator(
-                    backgroundColor: Color(0xFF79c942),
                   ),
-          ],
-        ),
-      ),
+                ),
     );
   }
 
@@ -330,31 +381,13 @@ class _AllPropertiesState extends State<AllProperties> {
                               ),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          padding: EdgeInsets.all(5),
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: bedroomValue,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.black),
-                            underline: Container(
-                              height: 0,
-                              color: Colors.black,
+                          padding: EdgeInsets.all(10),
+                          child: TextFormField(
+                            controller: bedroomController,
+                            decoration: InputDecoration(
+                              hintText: "Bedrooms"
                             ),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                bedroomValue = newValue;
-                              });
-                            },
-                            items: <String>['Bedrooms', '1', '2', '3']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                          ),
+                          )
                         ),
                         Container(
                           margin: EdgeInsets.all(10),
@@ -365,30 +398,12 @@ class _AllPropertiesState extends State<AllProperties> {
                               ),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(20))),
-                          padding: EdgeInsets.all(5),
-                          child: DropdownButton<String>(
-                            isExpanded: true,
-                            value: bathroomValue,
-                            icon: Icon(Icons.arrow_drop_down),
-                            iconSize: 24,
-                            elevation: 16,
-                            style: TextStyle(color: Colors.black),
-                            underline: Container(
-                              height: 0,
-                              color: Colors.black,
+                          padding: EdgeInsets.all(10),
+                          child: TextFormField(
+                            controller: bathroomController,
+                            decoration: InputDecoration(
+                              hintText: "Bathroom"
                             ),
-                            onChanged: (String newValue) {
-                              setState(() {
-                                bathroomValue = newValue;
-                              });
-                            },
-                            items: <String>['Bathrooms', '1', '2', '3']
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
                           ),
                         ),
                         Container(

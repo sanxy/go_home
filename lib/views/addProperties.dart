@@ -6,6 +6,7 @@ import 'package:http/http.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:go_home/classes/success.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quiver/async.dart';
 
 import '../components/labelledInput.dart';
 
@@ -19,6 +20,28 @@ class _AddPropertiesState extends State<AddProperties> {
 
   List user;
   String user_id, user_email;
+
+  int _start = 10;
+  int _current = 10;
+
+  void startTimer() {
+    CountdownTimer countDownTimer = new CountdownTimer(
+      new Duration(seconds: _start),
+      new Duration(seconds: 1),
+    );
+
+    var sub = countDownTimer.listen(null);
+    sub.onData((duration) {
+      setState(() {
+        _current = _start - duration.elapsed.inSeconds;
+      });
+    });
+
+    sub.onDone(() {
+      print("Done");
+      sub.cancel();
+    });
+  }
 
   getUserDetails() async {
     SharedPreferences shared_User = await SharedPreferences.getInstance();
@@ -72,7 +95,7 @@ class _AddPropertiesState extends State<AddProperties> {
 
   chooseImage() {
     setState(() {
-    file = ImagePicker.pickImage(source: ImageSource.gallery);
+      file = ImagePicker.pickImage(source: ImageSource.gallery);
     });
   }
 
@@ -139,15 +162,15 @@ class _AddPropertiesState extends State<AddProperties> {
 
     Success success = Success.fromJson(jsonDecode(body));
     if (success.status == "OK") {
-      titleController.text =null;
-       descController.text =null;
-       bathCountController.text= null;
-        bathCountController.text = null;
-        storeyController.text = null;
-        plotController.text = null;
-        priceController.text = null;
-        addressController.text = null;
-        zipController.text = null;
+      titleController.text = null;
+      descController.text = null;
+      bathCountController.text = null;
+      bathCountController.text = null;
+      storeyController.text = null;
+      plotController.text = null;
+      priceController.text = null;
+      addressController.text = null;
+      zipController.text = null;
 
       debugPrint(success.message);
       Map decode_options = jsonDecode(body);
@@ -175,15 +198,16 @@ class _AddPropertiesState extends State<AddProperties> {
           //   child: Text(snapshot.data.toString())
           // );
           return Flexible(
-              child: Container(
-            padding: EdgeInsets.all(20),
-            child: Image.file(
-              snapshot.data,
-              fit: BoxFit.fill,
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: 200,
+            child: Container(
+              padding: EdgeInsets.all(20),
+              child: Image.file(
+                snapshot.data,
+                fit: BoxFit.fill,
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: 200,
+              ),
             ),
-          ));
+          );
         } else if (null != snapshot.error) {
           return const Text(
             "Error selecting image",
@@ -761,7 +785,7 @@ class _AddPropertiesState extends State<AddProperties> {
                 ),
                 // Card(
                 //   child:
-                
+
                 Container(
                   height: MediaQuery.of(context).size.height * 0.5,
                   width: MediaQuery.of(context).size.width * 0.9,

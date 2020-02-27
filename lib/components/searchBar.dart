@@ -74,14 +74,13 @@ class DataSearch extends SearchDelegate<String> {
       margin: EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[
-          query.length < 1 ?
-          Center(
-            child: Text("No result found !"),
-          )
-          :
-          Center(
-            child: Text("Showing 1 result for " + query),
-          ),
+          query.length < 1
+              ? Center(
+                  child: Text("No result found !"),
+                )
+              : Center(
+                  child: Text("Showing 1 result for " + query),
+                ),
           Card(
               child: Container(
             padding: EdgeInsets.all(10),
@@ -110,13 +109,19 @@ class DataSearch extends SearchDelegate<String> {
     // Show when someone searches for something
     final suggestionList = query.isEmpty
         ? recentResults
-        : results.where((p) => p.startsWith(query)).toList();
+        : results.where((p) => p.startsWith(query)).toList(); // to fix lowercase searches with or
 
     return ListView.builder(
       itemBuilder: (context, index) => ListTile(
         onTap: () {
-          query =suggestionList[index];
-          showResults(context);
+          query = suggestionList[index];
+          // showResults(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CityContent(query),
+            ),
+          );
         },
         leading: Icon(Icons.location_city),
         title: RichText(

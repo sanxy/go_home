@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:go_home/views/forgotPassEmail.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import './dashboard.dart';
@@ -271,7 +272,13 @@ bool is_checked = false;
                       child: Container(
                     padding: EdgeInsets.all(10),
                     child: GestureDetector(
-                      onTap: null,
+                      onTap: (){
+                        Navigator.pushReplacement(
+                          context, 
+                          MaterialPageRoute(
+                            builder: (context) => ForgotPassEmail()
+                          ),);
+                      },
                       child: Text("Forgot password"),
                     ),
                   )),

@@ -90,7 +90,7 @@ Future<void> refresh() async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("All Properties"),
+        title: Text("All Properties in ${location.substring(0,1).toUpperCase() + location.substring(1)}"),
         backgroundColor: Color(0xFF79c942),
         key: GlobalKey(debugLabel: "sca"),
       ),

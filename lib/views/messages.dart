@@ -1,5 +1,7 @@
 // import 'package:flutter/material.dart';
 
+import 'package:go_home/views/eachMessage.dart';
+
 import '../components/InspectionView.dart';
 // import 'messaging.dart';
 
@@ -350,24 +352,7 @@ class _MessagesState extends State<Messages> {
                           return Center(
                             child: CircularProgressIndicator(),
                           );
-                        }
-                        else if (snapshot.hasData && !snapshot.hasError && _current > 0) {
-                          var myData = snapshot.data;
-                          return ListView.builder(
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            itemBuilder: (context, index) {
-                              final item = myData[index];
-                              return InspectionView(
-                                id: item["id"],
-                                title: item["sender_name"],
-                                requestQuestion: item["title"],
-                                followUp: item["message"],
-                              );
-                            },
-                            itemCount: myData.length,
-                          );
-                        }  else {
+                        }else if (!snapshot.hasData &&  _current == 0) {
                           return Column(
                             children: <Widget>[
                               Container(
@@ -385,6 +370,32 @@ class _MessagesState extends State<Messages> {
                                 ),
                               )
                             ],
+                          );
+                        }  else {
+                          var myData = snapshot.data;
+                          return ListView.builder(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final item = myData[index];
+                              return GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                    context, 
+                                    MaterialPageRoute(
+                                      builder: (context) => EachMessage()
+                                    ),
+                                  );
+                                },
+                                child: InspectionView(
+                                id: item["id"],
+                                title: item["sender_name"],
+                                requestQuestion: item["title"],
+                                followUp: item["message"],
+                              ),
+                              );
+                            },
+                            itemCount: myData.length,
                           );
                         }
                       },

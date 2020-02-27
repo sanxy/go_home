@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:go_home/views/modifyProfile.dart';
+import 'package:go_home/views/testPicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../components/customAppBar.dart';
@@ -122,10 +124,12 @@ class _ProfileState extends State<Profile> {
                   padding: EdgeInsets.all(20),
                   child: Row(
                     children: <Widget>[
-
                       CircleAvatar(
-                        backgroundImage: AssetImage(
-                          "assets/person.png",
+                        child: Container(
+                          child: FadeInImage.assetNetwork(
+                            placeholder: "assets/person.png",
+                            image: "http://www.gohome.ng/assets/images/agents/${user[1]}/${user[2]}",
+                          ),
                         ),
                         backgroundColor: Colors.white,
                         foregroundColor: Colors.white38,
@@ -179,10 +183,10 @@ class _ProfileState extends State<Profile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => EditProfile(),
+                        builder: (context) => ModifyProfile(),
                       ),
                     );
                   },

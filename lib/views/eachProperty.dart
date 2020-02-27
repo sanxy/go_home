@@ -4,6 +4,7 @@ import 'package:go_home/views/nearbyPlaces.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:network/network.dart' as network;
 import 'package:http/http.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:convert';
 // import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -65,7 +66,7 @@ class _EachPropertyState extends State<EachProperty> {
       String url = 'https://www.gohome.ng/send_message.php';
       Map<String, String> headers = {"Content-type": "application/json"};
       String json =
-          '{"sender_id" : "${senderId}", "receiver_id" : "${receiverId}", "name" : "${name}", "email" : "${email}", "phone_no" : "${phone}", "title" : "${title}", "message" : "${message}" }';
+          '{"sender_id" : "${senderId}", "receiver_id" : "${receiverId}", "name" : "${name}", "email" : "${email}", "phone_no" : "${phone}", "title" : "${title}", "message" : "${message}", "prop_id" : "${item.prop_id}" }';
       // make POST request
       Response response = await post(url, headers: headers, body: json);
       // check the status code for the result
@@ -85,14 +86,19 @@ class _EachPropertyState extends State<EachProperty> {
         //     builder: (context) => Dashboard(),
         //   ),
         // );
-        // setState(() {
-        //   isLoading = false;
-        // });
-        showSimpleCustomDialog(
-            context, "Success", "Request has been sent successfully");
+        setState(() {
+          nameController.text = "";
+          emailController.text = "";
+          phoneController.text = "";
+          messageController.text = "";
+        });
+        showSimpleCustomDialog(context, "Success",
+            "Request has been sent successfully", "assets/success.gif");
       }
       // debugPrint(user.toString());
     } else {
+      showSimpleCustomDialog(context, "Error",
+          "Request could not be sent at this time", "assets/error.gif");
       print("error");
     }
   }
@@ -110,8 +116,8 @@ class _EachPropertyState extends State<EachProperty> {
     imgToDisplay = item.img1;
   }
 
-  void showSimpleCustomDialog(
-      BuildContext context, String messageHead, String messageBody) {
+  void showSimpleCustomDialog(BuildContext context, String messageHead,
+      String messageBody, String dialogType) {
     Dialog simpleDialog = Dialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
@@ -126,9 +132,9 @@ class _EachPropertyState extends State<EachProperty> {
                 padding: EdgeInsets.all(15.0),
                 child: Column(
                   children: <Widget>[
-                    Text(
-                      messageHead,
-                      style: TextStyle(fontSize: 20),
+                    Image.asset(
+                      dialogType,
+                      height: 100,
                     ),
                     Container(
                       width: double.infinity,
@@ -150,13 +156,15 @@ class _EachPropertyState extends State<EachProperty> {
                 children: <Widget>[
                   Center(
                     child: MaterialButton(
-                      color: Colors.greenAccent,
+                      elevation: 0,
+                      color: Colors.white,
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
                       child: Text(
                         'Ok!',
-                        style: TextStyle(fontSize: 18.0, color: Colors.white),
+                        style:
+                            TextStyle(fontSize: 18.0, color: Color(0xFF79c942)),
                       ),
                     ),
                   ),
@@ -175,7 +183,8 @@ class _EachPropertyState extends State<EachProperty> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(item.title),
+        title: Text(
+            item.title.length > 20 ? item.title.substring(0, 20) : item.title),
         backgroundColor: Color(0xFF79c942),
         elevation: 0,
         actions: <Widget>[
@@ -202,15 +211,15 @@ class _EachPropertyState extends State<EachProperty> {
           child: Column(
             children: <Widget>[
               Container(
+                width: double.infinity,
                 height: MediaQuery.of(context).size.height * 0.4,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage("http://gohome.ng/assets/upload/" +
-                        item.prop_id +
-                        "/" +
-                        imgToDisplay),
-                    fit: BoxFit.cover,
-                  ),
+                child: FadeInImage.assetNetwork(
+                  image : "http://gohome.ng/assets/upload/" +
+                      item.prop_id +
+                      "/" +
+                      imgToDisplay,
+                  width: double.infinity,
+                  placeholder: "assets/property_location.jpg",
                 ),
               ),
               Container(
@@ -232,13 +241,14 @@ class _EachPropertyState extends State<EachProperty> {
                             children: <Widget>[
                               SizedBox(
                                 child: Image(
-                                image: NetworkImage(
-                                    "http://gohome.ng/assets/upload/" +
-                                        item.prop_id +
-                                        "/" +
-                                        item.img1),
-                                width: MediaQuery.of(context).size.width * 0.25,
-                              ),
+                                  image: NetworkImage(
+                                      "http://gohome.ng/assets/upload/" +
+                                          item.prop_id +
+                                          "/" +
+                                          item.img1),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.25,
+                                ),
                               )
                             ],
                           ),
@@ -540,12 +550,20 @@ class _EachPropertyState extends State<EachProperty> {
                   children: <Widget>[
                     Container(
                       padding: EdgeInsets.all(10),
+                      child: Text(
+                        item.title,
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
                       width: double.infinity,
                       child: Text(
                         "\u20A6 " + fAmount.output.nonSymbol + "/year",
                         textAlign: TextAlign.right,
                         style: TextStyle(
-                          fontSize: 30,
+                          fontSize: 20,
                           color: Color(0xFF79c942),
                         ),
                       ),
@@ -681,27 +699,26 @@ class _EachPropertyState extends State<EachProperty> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        padding: EdgeInsets.all(10),
-                        child: GestureDetector(
-                          onTap: (){
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => NearbyPlaces()
-                              )
-                            );
-                          },
-                          child: Column(
-                          children: <Widget>[
-                            Image(
-                              image: AssetImage("assets/property_location.jpg"),
-                              width: MediaQuery.of(context).size.width * 0.25,
+                          padding: EdgeInsets.all(10),
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => NearbyPlaces()));
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Image(
+                                  image: AssetImage(
+                                      "assets/property_location.jpg"),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.25,
+                                ),
+                                Text("Property location")
+                              ],
                             ),
-                            Text("Property location")
-                          ],
-                        ),
-                        )
-                      ),
+                          )),
                       Container(
                         padding: EdgeInsets.all(10),
                         child: Column(

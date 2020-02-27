@@ -6,7 +6,7 @@ import 'package:flutter_money_formatter/flutter_money_formatter.dart';
 
 import './pills.dart';
 
-class PropertyList extends StatefulWidget {
+class PropertyList extends StatelessWidget {
   final String id;
   final String amount;
   final String location;
@@ -21,69 +21,70 @@ class PropertyList extends StatefulWidget {
   final String email;
   final Widget goto;
 
-  PropertyList(
-      {this.id,
-      this.amount,
-      this.location,
-      this.propId,
-      this.region,
-      this.state,
-      this.imagePath,
-      this.saleOrRent,
-      this.title,
-      this.phone,
-      this.name,
-      this.email,
-      this.goto,});
+  PropertyList({
+    this.id,
+    this.amount,
+    this.location,
+    this.propId,
+    this.region,
+    this.state,
+    this.imagePath,
+    this.saleOrRent,
+    this.title,
+    this.phone,
+    this.name,
+    this.email,
+    this.goto,
+  });
 
-  @override
-  State<StatefulWidget> createState() => _PropertyListState(
-      id: id,
-      amount: amount,
-      location: location,
-      propId: propId,
-      region: region,
-      state: state,
-      imagePath: imagePath,
-      saleOrRent: saleOrRent,
-      title: title,
-      phone: phone,
-      name: name,
-      email: email,
-      goto: goto,);
-}
+//   @override
+//   State<StatefulWidget> createState() => _PropertyListState(
+//       id: id,
+//       amount: amount,
+//       location: location,
+//       propId: propId,
+//       region: region,
+//       state: state,
+//       imagePath: imagePath,
+//       saleOrRent: saleOrRent,
+//       title: title,
+//       phone: phone,
+//       name: name,
+//       email: email,
+//       goto: goto,);
+// }
 
-class _PropertyListState extends State<PropertyList> {
-  final String id;
-  final String amount;
-  final String location;
-  final String propId;
-  final String state;
-  final String region;
-  final String imagePath;
-  final String saleOrRent;
-  final String title;
-  final String phone;
-  final String name;
-  final String email;
-  final Widget goto;
+// class _PropertyListState extends State<PropertyList> {
+//   final String id;
+//   final String amount;
+//   final String location;
+//   final String propId;
+//   final String state;
+//   final String region;
+//   final String imagePath;
+//   final String saleOrRent;
+//   final String title;
+//   final String phone;
+//   final String name;
+//   final String email;
+//   final Widget goto;
 
-  _PropertyListState(
-      {this.id,
-      this.amount,
-      this.location,
-      this.propId,
-      this.region,
-      this.state,
-      this.imagePath,
-      this.saleOrRent,
-      this.title,
-      this.phone,
-      this.name,
-      this.email,
-      this.goto,});
+//   _PropertyListState(
+//       {this.id,
+//       this.amount,
+//       this.location,
+//       this.propId,
+//       this.region,
+//       this.state,
+//       this.imagePath,
+//       this.saleOrRent,
+//       this.title,
+//       this.phone,
+//       this.name,
+//       this.email,
+//       this.goto,});
 
-  String a;
+  // String a;
 
   void showSimpleCustomDialog(BuildContext context) {
     Dialog simpleDialog = Dialog(
@@ -190,10 +191,10 @@ class _PropertyListState extends State<PropertyList> {
                 children: <Widget>[
                   MaterialButton(
                       onPressed: () {
-                        setState(() {
-                          isActive = true;
-                          Navigator.of(context).pop();
-                        });
+                        // setState(() {
+                        //   isActive = true;
+                        //   Navigator.of(context).pop();
+                        // });
                       },
                       child: Icon(
                         Icons.check,
@@ -218,24 +219,39 @@ class _PropertyListState extends State<PropertyList> {
         context: context, builder: (BuildContext context) => simpleDialog);
   }
 
-  bool isActive = false;
+  // bool isActive = false;
+  toCurrency(String a) {
+    FlutterMoneyFormatter fAmount;
+    try {
+      fAmount = FlutterMoneyFormatter(amount: double.parse(a));
+    } catch (e) {
+      fAmount = FlutterMoneyFormatter(amount: double.parse("0.0"));
+      print(e.toString());
+    }
 
-  FlutterMoneyFormatter fAmount;
-
-  @override
-  void initState() {
-    super.initState();
-    isActive = false;
-    a = amount;
-    fAmount =
-        FlutterMoneyFormatter(amount: double.parse(a));
+    return fAmount;
   }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   isActive = false;
+  //   a = amount;
+  //   try{
+  //     fAmount =
+  //       FlutterMoneyFormatter(amount: double.parse(a));
+  //   }catch (e){
+  //     fAmount = FlutterMoneyFormatter(amount: double.parse("0.0"));
+  //     print(e.toString());
+  //   }
+
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Container(
-        height: 144.0,
+        height: 162.0,
         width: double.infinity,
         child: Column(
           children: <Widget>[
@@ -283,20 +299,20 @@ class _PropertyListState extends State<PropertyList> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
-                                  saleOrRent.length > 1 ?
-                                  Container(
-                                    child: Pill("For " + saleOrRent),
-                                  )
-                                  :
-                                  null,
-                                  isActive
+                                  saleOrRent.length > 1
                                       ? Container(
-                                          child: Icon(
-                                            Icons.favorite,
-                                            color: Colors.red,
-                                          ),
+                                          child: Pill("For " + saleOrRent),
                                         )
-                                      : Container(child: Text(""))
+                                      : null,
+                                  // isActive ?
+                                  //  Container(
+                                  //         child: Icon(
+                                  //           Icons.favorite,
+                                  //           color: Colors.red,
+                                  //         ),
+                                  //       ),
+                                  // :
+                                  Container(child: Text(""))
                                 ],
                               ),
                             ),
@@ -304,8 +320,11 @@ class _PropertyListState extends State<PropertyList> {
                             Container(
                               child: Text(
                                 title.length > 20
-                                    ? title.substring(0, 28) + "..."
-                                    : title,
+                                    ? title.substring(0, 25) +
+                                        "\n" +
+                                        title.substring(25, title.length < 50 ? title.length : 50) +
+                                        (title.length > 50 ? "..." : "")
+                                    : title + "\n",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -332,7 +351,11 @@ class _PropertyListState extends State<PropertyList> {
                             Container(
                               padding: EdgeInsets.only(left: 5),
                               child: Text(
-                                "\u20A6 " + fAmount.output.nonSymbol.toString(),
+                                "\u20A6 " +
+                                    toCurrency(amount)
+                                        .output
+                                        .nonSymbol
+                                        .toString(),
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
